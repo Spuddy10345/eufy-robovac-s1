@@ -92,7 +92,9 @@ class TuyaDiscovery(asyncio.DatagramProtocol):
         try:
             decoded = json.loads(data)
             # Ensure the sender IP is always captured even if the payload omits it
-            decoded.setdefault("ip", addr[0])
+            if "ip" not in decoded:
+                _LOGGER.debug("No IP in discovery payload from %s, using sender address", addr)
+                decoded["ip"] = addr[0]
             self.device_found(decoded)
         except json.JSONDecodeError:
             _LOGGER.debug("Could not parse JSON from %s: %s", addr, data)
