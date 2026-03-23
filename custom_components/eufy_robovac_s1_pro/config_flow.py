@@ -39,4 +39,4 @@ class EufyVacuumConfigFlow(ConfigFlow, domain=DOMAIN):
                     data={CONF_EMAIL: username, CONF_PASSWORD: password},
                 )
 
-        return self.async_show_form(step_id="user", data_schema=EUFY_LOGIN_SCHEMA)
+        return self.async_show_form(step_id="user", data_schema=EUFY_LOGIN_SCHEMA, errors=errors)

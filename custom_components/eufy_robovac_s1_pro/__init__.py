@@ -62,7 +62,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 # Fix KeyError: use pop with default value None
                 discovered_device = detected_devices.pop(device_id, None)
                 if discovered_device:
-                    device_ip = discovered_device["ip"]
+                    device_ip = discovered_device.get("ip")
+                    if not device_ip:
+                        logger.warning(
+                            "Discovered device %s missing IP address in broadcast payload; skipping.",
+                            device_id,
+                        )
+                        continue
 
                     logger.debug(
                         "Found matching discovered device at %s for device ID %s",
